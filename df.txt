@@ -1,0 +1,530 @@
+const supabaseClient = supabase.createClient(
+"https://YOUR_PROJECT.supabase.co",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhncmRjdndhbnd0dWp6dG96ZHl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NTExODAsImV4cCI6MjA4ODMyNzE4MH0.t5ZnzZ9mCWRI9ZYy7u1csLKgDFpYhiykZif9HY5er1c"
+)
+
+const lagosCities = [
+"Ikeja","Lekki","Ikoyi","Yaba","Surulere",
+"Ajah","Epe","Badagry","Agege","Alimosho",
+"Mushin","Oshodi","Maryland","Magodo",
+"Victoria Island","Festac","Apapa"
+]
+
+const citySelect = document.getElementById("city")
+
+lagosCities.forEach(city=>{
+let option=document.createElement("option")
+option.value=city
+option.textContent=city
+citySelect.appendChild(option)
+})
+
+function previewImage(event,previewId){
+
+const file=event.target.files[0]
+
+if(!file) return
+
+if(file.size>6000000){
+alert("Image must be less than 6MB")
+event.target.value=""
+return
+}
+
+const reader=new FileReader()
+
+reader.onload=function(){
+document.getElementById(previewId).src=reader.result
+}
+
+reader.readAsDataURL(file)
+
+}
+
+function startPayment(){
+
+if(!validateForm()){
+return
+}
+
+pay()
+
+}
+
+function pay(){
+
+let email=document.getElementById("email").value
+
+let handler=PaystackPop.setup({
+
+key:"pk_test_f2f445b987a52377afeb06c600d0213ff388828e",
+
+email:email,
+
+amount:350000,
+
+callback:function(response){
+
+verifyPayment(response.reference)
+
+}
+
+})
+
+handler.openIframe()
+
+}
+
+async function verifyPayment(reference){
+
+submitDriver(reference)
+
+}
+
+async function submitDriver(reference){
+
+let selfie=document.getElementById("selfie").files[0]
+let license=document.getElementById("licensePhoto").files[0]
+
+let selfiePath="selfies/"+Date.now()+selfie.name
+let licensePath="licenses/"+Date.now()+license.name
+
+await supabaseClient.storage
+.from("driver-documents")
+.upload(selfiePath,selfie)
+
+await supabaseClient.storage
+.from("driver-documents")
+.upload(licensePath,license)
+
+let { data } = supabaseClient.storage
+.from("driver-documents")
+.getPublicUrl(selfiePath)
+
+let selfieUrl=data.publicUrl
+
+let { data:licenseData } = supabaseClient.storage
+.from("driver-documents")
+.getPublicUrl(licensePath)
+
+let licenseUrl=licenseData.publicUrl
+
+await supabaseClient.from("drivers").insert([{
+
+first_name:document.getElementById("firstName").value,
+last_name:document.getElementById("lastName").value,
+email:document.getElementById("email").value,
+phone:document.getElementById("phone").value,
+gender:document.getElementById("gender").value,
+city:document.getElementById("city").value,
+license_number:document.getElementById("license").value,
+nin_bvn:document.getElementById("ninbvn").value,
+selfie_url:selfieUrl,
+license_url:licenseUrl,
+payment_reference:reference
+
+}])
+
+document.body.innerHTML=
+"<h1>Registration Successful 🎉</h1><p>Our team will review your application.</p>"
+
+}
+
+function validateForm(){
+
+let valid=true
+
+const firstName=document.getElementById("firstName").value
+const lastName=document.getElementById("lastName").value
+const phone=document.getElementById("phone").value
+const city=document.getElementById("city").value
+const license=document.getElementById("license").value
+const nin=document.getElementById("ninbvn").value
+const email=document.getElementById("email").value
+
+if(firstName.length>20){
+document.getElementById("firstNameError").innerText="Max 20 characters"
+valid=false
+}
+
+if(lastName.length>20){
+document.getElementById("lastNameError").innerText="Max 20 characters"
+valid=false
+}
+
+const phoneRegex=/^(\+234|234|0)[0-9]{10}$/
+
+if(!phoneRegex.test(phone)){
+document.getElementById("phoneError").innerText="Invalid Nigerian phone format"
+valid=false
+}
+
+if(!lagosCities.includes(city)){
+document.getElementById("cityError").innerText="Must be a Lagos city"
+valid=false
+}
+
+const licenseRegex=/^[a-zA-Z0-9]{1,10}$/
+
+if(!licenseRegex.test(license)){
+document.getElementById("licenseError").innerText="License must be alphanumeric and max 10 characters"
+valid=false
+}
+
+const ninRegex=/^[0-9]+$/
+
+if(!ninRegex.test(nin)){
+document.getElementById("ninError").innerText="NIN/BVN must be numeric"
+valid=false
+}
+
+const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+if(!emailRegex.test(email)){
+document.getElementById("emailError").innerText="Invalid email format"
+valid=false
+}
+
+return valid
+
+}
+
+body{
+font-family:Arial;
+background:#f6f6f6;
+padding:40px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:10px;
+border:1px solid #ddd;
+border-radius:6px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#00c853;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#00b248;
+}
+
+.error{
+color:red;
+font-size:12px;
+}
+
+.preview{
+width:100%;
+margin-top:10px;
+border-radius:6px;
+}
+
+.progress{
+display:flex;
+justify-content:space-between;
+margin-bottom:30px;
+}
+
+.step{
+width:33%;
+text-align:center;
+padding:10px;
+border-bottom:3px solid #ccc;
+font-weight:bold;
+}
+
+.step.active{
+border-color:#00c853;
+color:#00c853;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tranzit Driver Registration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<style>
+
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:#0e0e0e;
+color:white;
+margin:0;
+padding:0;
+}
+
+.container{
+max-width:600px;
+margin:auto;
+padding:30px;
+}
+
+h1{
+text-align:center;
+margin-bottom:10px;
+}
+
+.progress{
+display:flex;
+justify-content:space-between;
+margin-bottom:25px;
+}
+
+.step{
+width:30%;
+height:6px;
+background:#333;
+border-radius:5px;
+}
+
+.active{
+background:#00c2ff;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+background:#1c1c1c;
+color:white;
+}
+
+button{
+margin-top:20px;
+padding:14px;
+width:100%;
+border:none;
+border-radius:8px;
+background:#00c2ff;
+color:black;
+font-weight:bold;
+cursor:pointer;
+}
+
+.preview{
+margin-top:10px;
+max-width:100%;
+border-radius:8px;
+}
+
+.note{
+font-size:12px;
+color:#aaa;
+margin-top:4px;
+}
+
+.success{
+text-align:center;
+padding:40px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Tranzit Driver Onboarding</h1>
+
+<div class="progress">
+<div class="step active" id="p1"></div>
+<div class="step" id="p2"></div>
+<div class="step" id="p3"></div>
+</div>
+
+<!-- STEP 1 -->
+<div id="step1">
+
+<input id="firstName" placeholder="First Name (max 20)">
+<input id="lastName" placeholder="Last Name (max 20)">
+
+<select id="gender">
+<option value="">Select Gender</option>
+<option>Male</option>
+<option>Female</option>
+</select>
+
+<input id="city" placeholder="City in Lagos">
+
+<input id="phone" placeholder="Phone Number">
+
+<input id="email" placeholder="Email Address">
+
+<input id="licenseNumber" placeholder="Driver License Number">
+
+<input id="nin" placeholder="NIN or BVN">
+
+<button onclick="nextStep()">Continue</button>
+
+</div>
+
+
+<!-- STEP 2 -->
+<div id="step2" style="display:none">
+
+<label>Selfie</label>
+<input type="file" accept="image/*" capture="user" onchange="preview(this,'selfiePreview')">
+<img id="selfiePreview" class="preview"/>
+
+<label>Driver License Photo</label>
+<input type="file" accept="image/*" capture="environment" onchange="preview(this,'licensePreview')">
+<img id="licensePreview" class="preview"/>
+
+<button onclick="nextStep2()">Continue to Payment</button>
+
+</div>
+
+
+<!-- STEP 3 -->
+<div id="step3" style="display:none">
+
+<p>Vehicle Inspection Fee</p>
+<h2>₦3,500</h2>
+
+<button onclick="pay()">Pay with Paystack</button>
+
+<p class="note">
+Bank Transfer Option<br><br>
+
+Moniepoint MFB<br>
+Tranzit Mobility / Liberty Transport<br>
+7043266791<br><br>
+
+Zenith Bank<br>
+Tranzit Mobility<br>
+1310440942
+</p>
+
+</div>
+
+
+<!-- SUCCESS -->
+<div id="success" style="display:none" class="success">
+
+<h2>Registration Submitted</h2>
+
+<p>
+Your information is under review.<br>
+A member of the Tranzit team will contact you soon.
+</p>
+
+</div>
+
+</div>
+
+
+<script>
+
+function nextStep(){
+
+const name = document.getElementById("firstName").value
+const last = document.getElementById("lastName").value
+const phone = document.getElementById("phone").value
+const email = document.getElementById("email").value
+
+if(name.length>20 || last.length>20){
+alert("Names must be under 20 characters")
+return
+}
+
+if(!/^[0-9+]+$/.test(phone)){
+alert("Phone number invalid")
+return
+}
+
+if(!email.match(/.+@.+\..+/)){
+alert("Email format invalid")
+return
+}
+
+document.getElementById("step1").style.display="none"
+document.getElementById("step2").style.display="block"
+
+document.getElementById("p2").classList.add("active")
+
+}
+
+function nextStep2(){
+
+document.getElementById("step2").style.display="none"
+document.getElementById("step3").style.display="block"
+
+document.getElementById("p3").classList.add("active")
+
+}
+
+function preview(input,id){
+
+const file = input.files[0]
+const reader = new FileReader()
+
+reader.onload=function(){
+document.getElementById(id).src = reader.result
+}
+
+reader.readAsDataURL(file)
+
+}
+
+function pay(){
+
+var handler = PaystackPop.setup({
+
+key: 'pk_test_f2f445b987a52377afeb06c600d0213ff388828e',
+
+email: document.getElementById("email").value,
+
+amount: 3500 * 100,
+
+currency: "NGN",
+
+callback: function(response){
+
+alert("Payment Successful: " + response.reference)
+
+document.getElementById("step3").style.display="none"
+document.getElementById("success").style.display="block"
+
+},
+
+onClose: function(){
+alert('Payment cancelled')
+}
+
+})
+
+handler.openIframe()
+
+}
+
+</script>
+
+</body>
+</html>

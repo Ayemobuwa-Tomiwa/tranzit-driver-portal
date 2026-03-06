@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Tranzit Driver Onboarding</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 class="title">Tranzit Driver Onboarding</h1>
+
+<div class="progressBar">
+<div id="progressFill"></div>
+</div>
+
+
+<!-- STEP 1 -->
+
+<div id="step1">
+
+<input type="text" id="firstName" placeholder="First Name (max 20)" maxlength="20">
+<small class="error" id="firstNameError"></small>
+
+<input type="text" id="lastName" placeholder="Last Name (max 20)" maxlength="20">
+<small class="error" id="lastNameError"></small>
+
+<select id="gender">
+<option value="">Select Gender</option>
+<option>Male</option>
+<option>Female</option>
+</select>
+
+<select id="city">
+
+<option value="">City in Lagos</option>
+
+<option>Ikeja</option>
+<option>Lekki</option>
+<option>Ikoyi</option>
+<option>Yaba</option>
+<option>Surulere</option>
+<option>Ajah</option>
+<option>Agege</option>
+<option>Magodo</option>
+<option>Mushin</option>
+<option>Maryland</option>
+<option>Victoria Island</option>
+<option>Festac</option>
+<option>Apapa</option>
+
+</select>
+
+<input type="tel" id="phone" placeholder="Phone Number">
+<small class="error" id="phoneError"></small>
+
+<input type="email" id="email" placeholder="Email Address">
+<small class="error" id="emailError"></small>
+
+<input type="text" id="license" placeholder="Driver License Number">
+<small class="error" id="licenseError"></small>
+
+<input type="text" id="ninbvn" placeholder="NIN or BVN">
+<small class="error" id="ninError"></small>
+
+<button onclick="goToStep2()">Continue</button>
+
+</div>
+
+
+<!-- STEP 2 -->
+
+<div id="step2" class="hidden">
+
+<label class="uploadCard">
+
+<input type="file" id="selfie" accept="image/*" capture="user">
+
+<div class="uploadContent">
+<div class="uploadIcon">
+<i class="fa-solid fa-camera"></i>
+</div>
+<p>Take Selfie</p>
+<small>.jpeg or .png<br>max 5mb</small>
+</div>
+
+</label>
+
+<img id="selfiePreview" class="preview">
+
+<label class="uploadCard">
+
+<input type="file" id="licensePhoto" accept="image/*" capture="environment">
+
+<div class="uploadContent">
+<div class="uploadIcon">
+<i class="fa-solid fa-id-card"></i>
+</div>
+<p>Upload driver's License</p>
+<small>.jpeg or .png<br>max 5mb</small>
+</div>
+
+</label>
+
+<img id="licensePreview" class="preview">
+
+<button onclick="startPayment()">Continue to Payment</button>
+
+</div>
+
+
+<!-- STEP 3 -->
+
+<div id="step3" class="hidden">
+
+<h2>Inspection Fee</h2>
+
+<p class="fee">₦3500</p>
+
+<button onclick="pay()">Pay with Paystack</button>
+
+<div class="bank">
+
+<h3>Or Pay via Bank Transfer</h3>
+
+<p>
+Moniepoint MFB<br>
+Tranzit Mobility / Liberty Transport<br>
+7043266791
+</p>
+
+<p>
+Zenith Bank Plc<br>
+Tranzit Mobility<br>
+1310440942
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SUCCESS POPUP -->
+<div id="successPopup" class="success-popup hidden">
+  <div class="success-box">
+    <h2>Registration Submitted</h2>
+    <p>Your information has been received and is currently under review.</p>
+    <p>You should expect a response soon.</p>
+    <p>Welcome to Tranzit!</p>
+    <button onclick="closePopup()">Okay</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
