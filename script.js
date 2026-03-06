@@ -115,7 +115,7 @@ key:"pk_live_4b9ad95419e83678c60902bfdb0e332dbf1fe8bc",
 
 email:email,
 
-amount:350000,
+amount:250000,
 
 callback: function(response) {
 
@@ -224,12 +224,12 @@ valid=false
 }
 
 if(!licenseRegex.test(license)){
-document.getElementById("licenseError").innerText="License must be alphanumeric"
+document.getElementById("licenseError").innerText="License format not valid"
 valid=false
 }
 
 if(!ninRegex.test(nin)){
-document.getElementById("ninError").innerText="NIN/BVN must be numbers"
+document.getElementById("ninError").innerText="NIN must be valid"
 valid=false
 }
 

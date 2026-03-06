@@ -72,7 +72,7 @@
 <input type="text" id="license" placeholder="Driver License Number">
 <small class="error" id="licenseError"></small>
 
-<input type="text" id="ninbvn" placeholder="NIN or BVN">
+<input type="text" id="ninbvn" placeholder="Enter your 11-digit NIN" inputmode="numeric" maxlength="11">
 <small class="error" id="ninError"></small>
 
 <button onclick="goToStep2()">Continue</button>
@@ -127,7 +127,7 @@
 
 <h2>Inspection Fee</h2>
 
-<p class="fee">₦3500</p>
+<p class="fee">₦2500</p>
 
 <button onclick="pay()">Pay with Paystack</button>
 
