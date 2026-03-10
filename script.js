@@ -12,9 +12,6 @@ function updateProgress(){
 
 const fill = document.getElementById("progressFill")
 
-const gender=document.getElementById("gender").value
-const city=document.getElementById("city").value
-
 const progress = {
 1: "33%",
 2: "66%",
@@ -214,6 +211,8 @@ function validateForm(){
 
 let valid=true
 
+const gender=document.getElementById("gender").value
+const city=document.getElementById("city").value
 const phone=document.getElementById("phone").value
 const email=document.getElementById("email").value
 const license=document.getElementById("license").value
