@@ -12,6 +12,9 @@ function updateProgress(){
 
 const fill = document.getElementById("progressFill")
 
+const gender=document.getElementById("gender").value
+const city=document.getElementById("city").value
+
 const progress = {
 1: "33%",
 2: "66%",
@@ -216,6 +219,8 @@ const email=document.getElementById("email").value
 const license=document.getElementById("license").value
 const nin=document.getElementById("ninbvn").value
 
+document.getElementById("genderError").innerText=""
+document.getElementById("cityError").innerText=""
 document.getElementById("phoneError").innerText=""
 document.getElementById("licenseError").innerText=""
 document.getElementById("ninError").innerText=""
@@ -227,13 +232,23 @@ const ninRegex=/^[0-9]{11}$/
 const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 
+if(gender===""){
+document.getElementById("genderError").innerText="Please select gender"
+return false
+}
+
+if(city===""){
+document.getElementById("cityError").innerText="Please select your city"
+return false
+}
+
 if(!phoneRegex.test(phone)){
 document.getElementById("phoneError").innerText="Invalid phone format"
 return false
 }
 
 if(!licenseRegex.test(license)){
-document.getElementById("licenseError").innerText="License must be max 12 characters"
+document.getElementById("licenseError").innerText="License must be 12 characters"
 return false
 }
 
