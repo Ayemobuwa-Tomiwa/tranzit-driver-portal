@@ -93,6 +93,10 @@ function closePopup(){
 
 window.onload = function(){
 
+ document.getElementById("ninbvn").addEventListener("input", function(){
+this.value=this.value.replace(/\D/g,"").slice(0,11)
+})
+
 document.getElementById("selfie").addEventListener("change", function(){
 previewImage(this,"selfiePreview")
 })
@@ -212,32 +216,37 @@ const email=document.getElementById("email").value
 const license=document.getElementById("license").value
 const nin=document.getElementById("ninbvn").value
 
+document.getElementById("phoneError").innerText=""
+document.getElementById("licenseError").innerText=""
+document.getElementById("ninError").innerText=""
+document.getElementById("emailError").innerText=""
+
 const phoneRegex=/^(\+234|234|0)[0-9]{10}$/
-const licenseRegex=/^[a-zA-Z0-9]{1,10}$/
-const ninRegex=/^[0-9]+$/
+const licenseRegex=/^[a-zA-Z0-9]{1,12}$/
+const ninRegex=/^[0-9]{11}$/
 const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 
 if(!phoneRegex.test(phone)){
 document.getElementById("phoneError").innerText="Invalid phone format"
-valid=false
+return false
 }
 
 if(!licenseRegex.test(license)){
-document.getElementById("licenseError").innerText="License format not valid"
-valid=false
+document.getElementById("licenseError").innerText="License must be max 12 characters"
+return false
 }
 
 if(!ninRegex.test(nin)){
-document.getElementById("ninError").innerText="NIN must be valid"
-valid=false
+document.getElementById("ninError").innerText="NIN must be 11 digits"
+return false
 }
 
 if(!emailRegex.test(email)){
 document.getElementById("emailError").innerText="Invalid email"
-valid=false
+return false
 }
 
-return valid
+return true
 
 }
