@@ -119,7 +119,7 @@ key:"pk_live_4b9ad95419e83678c60902bfdb0e332dbf1fe8bc",
 
 email:email,
 
-amount:250000,
+amount:100000,
 
 callback: function(response) {
 
