@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script src="https://js.paystack.co/v1/inline.js"></script>
 
 </head>
 
@@ -123,16 +122,33 @@
 </div>
 
 
-<!-- STEP 3 -->
+<!-- STEP 3 (REVIEW) -->
 
 <div id="step3" class="hidden">
 
-<h2>Inspection Fee</h2>
+<h2>Review Your Information</h2>
 
-<p class="fee">₦1000</p>
+<div class="reviewBox">
 
-<button onclick="pay()">Pay with Paystack</button>
+<p><strong>First Name:</strong> <span id="r_firstName"></span></p>
+<p><strong>Last Name:</strong> <span id="r_lastName"></span></p>
+<p><strong>Email:</strong> <span id="r_email"></span></p>
+<p><strong>Phone:</strong> <span id="r_phone"></span></p>
+<p><strong>Gender:</strong> <span id="r_gender"></span></p>
+<p><strong>City:</strong> <span id="r_city"></span></p>
+<p><strong>License:</strong> <span id="r_license"></span></p>
+<p><strong>NIN:</strong> <span id="r_nin"></span></p>
 
+<div class="reviewImages">
+<img id="r_selfie" class="preview">
+<img id="r_licensePhoto" class="preview">
+</div>
+
+</div>
+
+<div class="reviewActions">
+<button onclick="goToStep1()">Edit</button>
+<button onclick="finalSubmit()">Submit</button>
 </div>
 
 </div>

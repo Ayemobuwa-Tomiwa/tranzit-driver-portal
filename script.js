@@ -42,11 +42,12 @@ const selfie=document.getElementById("selfie").files[0]
 const license=document.getElementById("licensePhoto").files[0]
 
 if(!selfie || !license){
-
 alert("Upload both photos")
 return
-
 }
+
+// Populate review screen
+populateReview()
 
 document.getElementById("step2").classList.add("hidden")
 document.getElementById("step3").classList.remove("hidden")
@@ -56,6 +57,35 @@ updateProgress()
 
 }
 
+function populateReview(){
+
+document.getElementById("r_firstName").innerText = document.getElementById("firstName").value
+document.getElementById("r_lastName").innerText = document.getElementById("lastName").value
+document.getElementById("r_email").innerText = document.getElementById("email").value
+document.getElementById("r_phone").innerText = document.getElementById("phone").value
+document.getElementById("r_gender").innerText = document.getElementById("gender").value
+document.getElementById("r_city").innerText = document.getElementById("city").value
+document.getElementById("r_license").innerText = document.getElementById("license").value
+document.getElementById("r_nin").innerText = document.getElementById("ninbvn").value
+
+// images
+const selfie=document.getElementById("selfie").files[0]
+const license=document.getElementById("licensePhoto").files[0]
+
+document.getElementById("r_selfie").src = URL.createObjectURL(selfie)
+document.getElementById("r_licensePhoto").src = URL.createObjectURL(license)
+
+}
+
+function goToStep1(){
+
+document.getElementById("step3").classList.add("hidden")
+document.getElementById("step1").classList.remove("hidden")
+
+currentStep = 1
+updateProgress()
+
+}
 
 
 function previewImage(fileInput, previewId){
@@ -108,38 +138,7 @@ previewImage(this,"licensePreview")
 }
 
 
-
-async function pay(){
-
-let email=document.getElementById("email").value
-
-let handler=PaystackPop.setup({
-
-key:"pk_live_4b9ad95419e83678c60902bfdb0e332dbf1fe8bc",
-
-email:email,
-
-amount:100000,
-
-callback: function(response) {
-
-    if(response.status === "success"){
-
-        document.getElementById("successPopup").classList.remove("hidden");
-
-    }
-
-}
-
-})
-
-handler.openIframe()
-
-}
-
-
-
-async function submitDriver(reference){
+async function finalSubmit(){
 
 try{
 
@@ -149,7 +148,6 @@ let license=document.getElementById("licensePhoto").files[0]
 let selfiePath="selfies/"+Date.now()+selfie.name
 let licensePath="licenses/"+Date.now()+license.name
 
-
 await supabaseClient.storage
 .from("driver-documents")
 .upload(selfiePath,selfie)
@@ -158,20 +156,17 @@ await supabaseClient.storage
 .from("driver-documents")
 .upload(licensePath,license)
 
-
 let { data } = supabaseClient.storage
 .from("driver-documents")
 .getPublicUrl(selfiePath)
 
 let selfieUrl=data.publicUrl
 
-
 let { data:licenseData } = supabaseClient.storage
 .from("driver-documents")
 .getPublicUrl(licensePath)
 
 let licenseUrl=licenseData.publicUrl
-
 
 await supabaseClient.from("drivers").insert([{
 
@@ -184,28 +179,22 @@ city:document.getElementById("city").value,
 license_number:document.getElementById("license").value,
 nin_bvn:document.getElementById("ninbvn").value,
 selfie_url:selfieUrl,
-license_url:licenseUrl,
-payment_reference:reference
+license_url:licenseUrl
 
 }])
 
-
-alert("✅ Registration successful!\n\nYour documents are now under review. You will receive confirmation shortly.")
-
-location.reload()
+// show success popup
+document.getElementById("successPopup").classList.remove("hidden")
 
 }
-
 catch(err){
 
 console.error(err)
-
-alert("Something went wrong submitting your registration. Please contact support.")
-
-}
+alert("Submission failed. Try again.")
 
 }
 
+}
 
 function validateForm(){
 
