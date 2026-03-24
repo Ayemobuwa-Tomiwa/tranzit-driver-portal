@@ -325,7 +325,17 @@ alert("Submission failed. Try again.")
 
 }
 
+/* ---------------- Close Popup ---------------- */
+function closePopup(){
 
+document.getElementById("successPopup")
+.classList.add("hidden")
+
+setTimeout(()=>{
+location.reload()
+},500)
+
+}
 
 /* ---------------- VALIDATION ---------------- */
 
