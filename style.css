@@ -197,3 +197,99 @@ border:2px solid #22c55e;
 .hidden {
   display: none;
 }
+
+.whatsapp-btn {
+
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+
+background-color: #25D366;
+color: white;
+
+border: none;
+border-radius: 8px;
+
+padding: 14px;
+font-size: 16px;
+font-weight: 600;
+
+cursor: pointer;
+
+width: 100%;
+
+transition: 0.2s;
+
+}
+
+
+
+/* ICON WRAPPER */
+
+.whatsapp-icon-wrapper {
+
+position: relative;
+width: 22px;
+height: 22px;
+
+}
+
+
+
+/* DEFAULT ICON */
+
+.default-icon {
+
+position: absolute;
+width: 22px;
+height: 22px;
+
+}
+
+
+
+/* HOVER ICON */
+
+.hover-icon {
+
+position: absolute;
+width: 22px;
+height: 22px;
+
+opacity: 0;
+
+}
+
+
+
+/* SWAP ON HOVER */
+
+.whatsapp-btn:hover .default-icon {
+
+opacity: 0;
+
+}
+
+.whatsapp-btn:hover .hover-icon {
+
+opacity: 1;
+
+}
+
+
+
+/* BUTTON HOVER */
+
+.whatsapp-btn:hover {
+
+background-color: #1ebe5d;
+
+}
+
+.default-icon,
+.hover-icon {
+
+transition: opacity 0.2s ease;
+
+}

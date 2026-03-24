@@ -326,14 +326,12 @@ alert("Submission failed. Try again.")
 }
 
 /* ---------------- Close Popup ---------------- */
-function closePopup(){
+function joinWhatsapp(){
 
-document.getElementById("successPopup")
-.classList.add("hidden")
-
-setTimeout(()=>{
-location.reload()
-},500)
+window.open(
+"https://chat.whatsapp.com/HOSQCt41riF87EmKLsM1By?mode=gi_t",
+"_blank"
+)
 
 }
 
