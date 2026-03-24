@@ -2,7 +2,7 @@ const { createClient } = supabase;
 
 const supabaseClient = createClient(
 "https://hgrdcvwanwtujztozdyw.supabase.co",
-"YOUR_ANON_KEY_HERE"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhncmRjdndhbnd0dWp6dG96ZHl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NTExODAsImV4cCI6MjA4ODMyNzE4MH0.t5ZnzZ9mCWRI9ZYy7u1csLKgDFpYhiykZif9HY5er1c"
 )
 
 let currentStep = 1;
