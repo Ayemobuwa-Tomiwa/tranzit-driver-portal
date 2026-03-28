@@ -43,7 +43,7 @@ document.getElementById("step2").classList.remove("hidden")
 
 
 
-function startPayment(){
+function startConfirmation(){
 
 const selfie=document.getElementById("selfie").files[0]
 const license=document.getElementById("licensePhoto").files[0]
